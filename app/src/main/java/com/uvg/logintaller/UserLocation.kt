@@ -3,7 +3,6 @@ package com.uvg.logintaller
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
@@ -11,23 +10,14 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.RuntimeExecutionException
-import com.google.android.gms.tasks.Task
-import com.google.maps.android.clustering.Cluster
-import com.google.maps.android.clustering.ClusterManager
-import java.util.*
 
 class UserLocation : AppCompatActivity(), OnMapReadyCallback {
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -45,13 +35,13 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        Log.d("Debug:",CheckPermission().toString())
-        Log.d("Debug:",isLocationEnabled().toString())
-        RequestPermission()
+        Log.d("Debug:",ComprobarPermiso().toString())
+        Log.d("Debug:",encotrarLocation().toString())
+        PedirPermiso()
         /* fusedLocationProviderClient.lastLocation.addOnSuccessListener{location: Location? ->
              textView.text = location?.latitude.toString() + "," + location?.longitude.toString()
          }*/
-        getLastLocation()
+        ObtenerUltimaLocalizacion()
 
     }
     override fun onMapReady(googleMap: GoogleMap) {
@@ -63,9 +53,9 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun getLastLocation(){
-        if(CheckPermission()){
-            if(isLocationEnabled()){
+    fun ObtenerUltimaLocalizacion(){
+        if(ComprobarPermiso()){
+            if(encotrarLocation()){
                 if (ActivityCompat.checkSelfPermission(
                         this,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -86,11 +76,11 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener { task->
                     var location:Location? = task.result
                     if(location == null){
-                        NewLocationData()
+                        ObtenerNuevaLocacion()
                     }else{
                         Log.d("Debug:" ,"Your Location:"+ location.longitude)
                         var miUbico = LatLng(location.latitude,location.longitude)
-                        animateZoomInCamera(miUbico)
+                        ZoomCamera(miUbico)
                         //textView.text = "You Current Location is : Long: "+ location.longitude + " , Lat: " + location.latitude + "\n" + getCityName(location.latitude,location.longitude)
                     }
                 }
@@ -98,16 +88,16 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this,"Please Turn on Your device Location",Toast.LENGTH_SHORT).show()
             }
         }else{
-            RequestPermission()
+            PedirPermiso()
         }
     }
-    fun animateZoomInCamera(latLng: LatLng) {
+    fun ZoomCamera(latLng: LatLng) {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
         mMap.addMarker(MarkerOptions().position(latLng).title("Tu ubicación"))
     }
 
 
-    fun NewLocationData(){
+    fun ObtenerNuevaLocacion(){
         var locationRequest =  LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
@@ -145,7 +135,7 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun CheckPermission():Boolean{
+    private fun ComprobarPermiso():Boolean{
         //this function will return a boolean
         //true: if we have permission
         //false if not
@@ -160,7 +150,7 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun RequestPermission(){
+    fun PedirPermiso(){
         //this function will allows us to tell the user to requesut the necessary permsiion if they are not garented
         ActivityCompat.requestPermissions(
             this,
@@ -169,7 +159,7 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    fun isLocationEnabled():Boolean{
+    fun encotrarLocation():Boolean{
         //this function will return to us the state of the location service
         //if the gps or the network provider is enabled then it will return true otherwise it will return false
         var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -188,18 +178,6 @@ class UserLocation : AppCompatActivity(), OnMapReadyCallback {
                 Log.d("Debug:","You have the Permission")
             }
         }
-    }
-
-    fun getCityName(lat: Double,long: Double):String{
-        var cityName:String = ""
-        var countryName = ""
-        var geoCoder = Geocoder(this, Locale.getDefault())
-        var Adress = geoCoder.getFromLocation(lat,long,3)
-
-        cityName = Adress.get(0).locality
-        countryName = Adress.get(0).countryName
-        Log.d("Debug:","Your City: " + cityName + " ; your Country " + countryName)
-        return cityName
     }
 
 }

@@ -11,8 +11,8 @@
 
     <ImageButton
         android:id="@+id/btnIniciarSesion"
-        android:layout_width="95dp"
-        android:layout_height="wrap_content"
+        android:layout_width="146dp"
+        android:layout_height="138dp"
 
         android:background="#FFFFFF"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
