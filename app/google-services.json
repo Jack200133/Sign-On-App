@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "276874851499",
+    "project_id": "logintaller-6b02f",
+    "storage_bucket": "logintaller-6b02f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276874851499:android:f04f6b30caac1a606eb3ee",
+        "android_client_info": {
+          "package_name": "com.uvg.logintaller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276874851499-qo7q3fvsbafioajvlso3ll4se2noa6vh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uvg.logintaller",
+            "certificate_hash": "404c3c9faac6df501cea7f56fee278aa2cabd208"
+          }
+        },
+        {
+          "client_id": "276874851499-8gq6oh64dkrdc7ur90tc7qhtu60vgal5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1Xp6vdEBRRLO1EVtJdHC6Pf9rfcFCpFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276874851499-8gq6oh64dkrdc7ur90tc7qhtu60vgal5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
